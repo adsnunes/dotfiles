@@ -27,7 +27,7 @@ link yazi/theme.toml "$HOME/.config/yazi/theme.toml"
 link newsboat/config "$HOME/.config/newsboat/config"
 link newsboat/urls "$HOME/.config/newsboat/urls"
 link mpv/mpv.conf "$HOME/.config/mpv/mpv.conf"
-for f in theme menu media shot lock wall agents focus notify; do link "bin/$f" "$HOME/.local/bin/$f"; done
+for f in theme menu media shot lock wall agents focus notify np; do link "bin/$f" "$HOME/.local/bin/$f"; done
 
 mkdir -p "$HOME/.config/dunst/dunstrc.d" "$HOME/.config/cava"
 [ -f "$HOME/.config/btop/btop.conf" ] || cp "$dots/btop/btop.conf" "$HOME/.config/btop/btop.conf"

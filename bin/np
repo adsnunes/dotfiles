@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""np: o que está tocando, centrado no terminal, com uma barra de progresso fina. Fica em cima do cava."""
+import shutil
+import subprocess
+import sys
+import time
+
+FMT = "{{status}}\t{{lc(title)}}\t{{lc(artist)}}\t{{position}}\t{{mpris:length}}"
+
+
+def mmss(us):
+    s = int(us // 1_000_000)
+    return f"{s // 3600}:{s // 60 % 60:02d}:{s % 60:02d}" if s >= 3600 else f"{s // 60:02d}:{s % 60:02d}"
+
+
+def frame():
+    out = subprocess.run(["playerctl", "metadata", "--format", FMT], capture_output=True, text=True).stdout
+    cols, rows = shutil.get_terminal_size()
+    lines = []
+    if out.strip():
+        status, title, artist, pos, length = (out.rstrip("\n").split("\t") + [""] * 5)[:5]
+        pos, length = int(pos or 0), int(length or 0)
+        width = max(10, min(cols - 22, 48))
+        k = int(width * pos / length) if length else 0
+        bar = "─" * k + "●" + "─" * (width - k)
+        icon = "▶" if status == "Playing" else "॥"
+        lines = [title, f"\x1b[90m{artist}\x1b[0m", "", f"\x1b[90m{bar[:k]}\x1b[0m{bar[k:k + 1]}\x1b[90m{bar[k + 1:]}\x1b[0m",
+                 f"\x1b[90m{icon}  {mmss(pos)} / {mmss(length)}\x1b[0m"]
+        widths = [len(title), len(artist), 0, width + 1, len(mmss(pos)) + len(mmss(length)) + 6]
+    else:
+        lines, widths = ["\x1b[90mnothing playing\x1b[0m"], [15]
+    top = max(0, (rows - len(lines)) // 2)
+    buf = ["\x1b[H\x1b[2J", "\n" * top]
+    for line, w in zip(lines, widths):
+        buf.append(" " * max(0, (cols - w) // 2) + line + "\n")
+    sys.stdout.write("".join(buf))
+    sys.stdout.flush()
+
+
+def main():
+    sys.stdout.write("\x1b[?25l")
+    try:
+        while True:
+            frame()
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        sys.stdout.write("\x1b[?25h\x1b[H\x1b[2J")
+
+
+if __name__ == "__main__":
+    main()

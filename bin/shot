@@ -1,0 +1,8 @@
+#!/bin/sh
+# Captura de uma área (ou da tela inteira, com Esc) para ~/Pictures/shots e para a área de transferência.
+dir="$HOME/Pictures/shots"
+mkdir -p "$dir"
+f="$dir/$(date +%Y-%m-%d_%H%M%S).png"
+maim -s -u -b 1 -c 0.82,0.82,0.82 "$f" 2>/dev/null || maim -u "$f"
+xclip -selection clipboard -t image/png <"$f"
+~/.local/bin/notify -u low "screenshot" "$(basename "$f")"

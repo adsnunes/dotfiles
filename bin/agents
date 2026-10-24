@@ -1,0 +1,28 @@
+#!/bin/sh
+# Agentes de IA no herdr, para a barra. Só o que pede atenção: quantos estão trabalhando e quantos esperam por você
+# (terminaram ou estão bloqueados). Agente parado não aparece. Nunca mostra nomes.
+#   [ AGENTS: 2 WORKING · 1 NEEDS YOU ]   ou   [ AGENTS: QUIET ]
+# O herdr pode estar em outra máquina: ponha o destino ssh em ~/.config/herdr-remote (ex.: "mac").
+remote=$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/herdr-remote" 2>/dev/null)
+if [ -n "$remote" ]; then
+  json=$(ssh -o BatchMode=yes -o ConnectTimeout=3 "$remote" '$HOME/.local/bin/herdr agent list || herdr agent list' 2>/dev/null)
+else
+  json=$(herdr agent list 2>/dev/null)
+fi
+[ -n "$json" ] || { echo; exit 0; }
+printf '%s' "$json" | python3 -c '
+import json, sys
+try:
+    agents = json.load(sys.stdin)["result"]["agents"]
+except Exception:
+    print(); sys.exit()
+st = [a.get("agent_status") for a in agents]
+working = st.count("working")
+waiting = st.count("blocked") + st.count("done")
+parts = []
+if working:
+    parts.append(f"{working} WORKING")
+if waiting:
+    parts.append(f"{waiting} NEED{"S" if waiting == 1 else ""} YOU")
+print("[ AGENTS: " + (" · ".join(parts) or "QUIET") + " ]")
+'

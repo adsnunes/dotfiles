@@ -1,0 +1,12 @@
+#!/bin/sh
+# Alt+W: troca para outro escoamento (outra semente do flow.py), no modo claro ou escuro atual.
+dots=$(dirname "$(readlink -f "$0")")/..
+cache="${XDG_CACHE_HOME:-$HOME/.cache}"
+mode=$(cat "$cache/theme" 2>/dev/null || echo dark)
+cur=$(cat "$cache/wallpaper" 2>/dev/null || echo 1962)
+seeds=$(ls "$dots/wallpapers/flow" | sed -n "s/^$mode-\([0-9]*\)\.png$/\1/p" | sort -n)
+next=$(printf '%s\n' $seeds | awk -v c="$cur" 'NR==1{f=$1} p{print; exit} $1==c{p=1} END{if(!p||NR==0)print f}' | head -1)
+[ -n "$next" ] || next=$(printf '%s\n' $seeds | head -1)
+echo "$next" >"$cache/wallpaper"
+feh --no-fehbg --bg-fill "$dots/wallpapers/flow/$mode-$next.png"
+~/.local/bin/notify -u low -r 4041 "flow #$next" "past a cylinder"

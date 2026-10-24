@@ -1,0 +1,2 @@
+# Só desta máquina: monitores, apps que abrem sozinhos, atalhos de hardware.
+# exec_always --no-startup-id xrandr --output LVDS-1 --auto --primary

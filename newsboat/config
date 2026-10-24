@@ -1,0 +1,44 @@
+# graphite · newsboat
+auto-reload yes
+reload-time 60
+reload-threads 6
+show-read-feeds yes
+show-keymap-hint no
+swap-title-and-hints yes
+feedlist-title-format "  feeds · %u new"
+articlelist-title-format "  %T · %u new"
+itemview-title-format "  %T"
+feedlist-format "  %?d?%-28d&%-28t? %?U?%3U&   ?"
+articlelist-format "  %D   %?T?%-18T  ?%t"
+datetime-format "%d %b"
+text-width 78
+scrolloff 4
+browser "xdg-open %u"
+
+# ,v abre no mpv (vídeos do YouTube saem pelo yt-dlp)
+macro v set browser "setsid -f mpv --really-quiet %u >/dev/null 2>&1" ; open-in-browser ; set browser "xdg-open %u"
+
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit
+bind-key g home
+bind-key G end
+
+color background          default   default
+color listnormal          color245  default
+color listnormal_unread   color252  default
+color listfocus           color255  color238
+color listfocus_unread    color255  color238  bold
+color info                color245  default
+color title               color252  default
+color article             color252  default
+color hint-key            color252  default
+color hint-keys-delimiter color241  default
+color hint-separator      color241  default
+color hint-description    color245  default
+
+highlight article "^(Feed|Title|Author|Link|Date):" color245 default
+highlight article "^(Title):.*$" color255 default bold
+highlight article "https?://[^ ]+" color241 default
+highlight feedlist "^  ─.*$" color241 default

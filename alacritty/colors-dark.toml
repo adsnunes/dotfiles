@@ -1,0 +1,32 @@
+# graphite dark
+[colors.primary]
+background = "#2f3134"
+foreground = "#d0d1d2"
+
+[colors.cursor]
+text = "#2f3134"
+cursor = "#d0d1d2"
+
+[colors.selection]
+text = "#ececec"
+background = "#45484c"
+
+[colors.normal]
+black = "#3a3c40"
+red = "#b8a2a2"
+green = "#a7b2a2"
+yellow = "#bcb8a4"
+blue = "#a2acb8"
+magenta = "#b0a6b6"
+cyan = "#a2b4b4"
+white = "#d0d1d2"
+
+[colors.bright]
+black = "#5c5f63"
+red = "#ccb6b6"
+green = "#bbc6b6"
+yellow = "#d0ccb8"
+blue = "#b6c0cc"
+magenta = "#c4bacc"
+cyan = "#b6c8c8"
+white = "#ececec"

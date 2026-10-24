@@ -1,0 +1,12 @@
+#!/bin/sh
+# Notificação pelo D-Bus, sem libnotify: notify [-u low|normal|critical] [-r id] título [texto]
+u=1 r=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u) case "$2" in low) u=0 ;; critical) u=2 ;; *) u=1 ;; esac; shift 2 ;;
+    -r) r=$2; shift 2 ;;
+    *) break ;;
+  esac
+done
+gdbus call --session --dest org.freedesktop.Notifications --object-path /org/freedesktop/Notifications \
+  --method org.freedesktop.Notifications.Notify -- graphite "$r" "" "${1:-}" "${2:-}" '[]' "{'urgency': <byte $u>}" -1 >/dev/null

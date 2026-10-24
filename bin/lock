@@ -1,0 +1,5 @@
+#!/bin/sh
+# Tela de bloqueio na cor do modo atual.
+mode=$(cat "${XDG_CACHE_HOME:-$HOME/.cache}/theme" 2>/dev/null || echo dark)
+[ "$mode" = light ] && c=e8e6e1 || c=2f3134
+exec i3lock -n -c "$c"

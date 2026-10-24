@@ -1,0 +1,38 @@
+#!/bin/sh
+# Alt+Z: modo foco. A barra vira só uma contagem regressiva, as notificações pausam e as janelas ganham espaço.
+# focus [minutos]   liga (padrão 25) ou desliga, se já estiver ligado
+# focus stop        desliga
+# focus left        tempo que falta, para a barra
+dots=$(dirname "$(readlink -f "$0")")/..
+f="${XDG_CACHE_HOME:-$HOME/.cache}/focus"
+
+stop() {
+  [ -f "$f" ] || return 0
+  pid=$(sed -n 2p "$f")
+  rm -f "$f"
+  [ -n "$pid" ] && [ "$pid" != $$ ] && kill "$pid" 2>/dev/null
+  i3-msg -q "gaps inner all set 12; gaps outer all set 4"
+  dunstctl set-paused false
+  "$dots/polybar/launch.sh"
+  [ "${1:-}" = done ] && ~/.local/bin/notify -u normal -r 4042 "break." "stand up. look outside."
+}
+
+case "${1:-}" in
+  left)
+    [ -f "$f" ] || { echo; exit 0; }
+    s=$(( $(sed -n 1p "$f") - $(date +%s) ))
+    [ "$s" -lt 0 ] && s=0
+    printf '[ FOCUS: %02d:%02d ]\n' $((s / 60)) $((s % 60))
+    ;;
+  stop) stop ;;
+  done) stop done ;;
+  *)
+    if [ -f "$f" ]; then stop; exit 0; fi
+    min=${1:-25}
+    echo $(( $(date +%s) + min * 60 )) >"$f"
+    setsid -f sh -c "echo \$\$ >>'$f'; sleep $((min * 60)); exec '$0' done" >/dev/null 2>&1
+    dunstctl set-paused true
+    i3-msg -q "gaps inner all set 40; gaps outer all set 28"
+    "$dots/polybar/launch.sh"
+    ;;
+esac

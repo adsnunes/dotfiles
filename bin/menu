@@ -1,0 +1,49 @@
+#!/bin/sh
+# Menu de comandos (Alt+/): o que não tem atalho próprio, e a lista de atalhos.
+keys() {
+  printf '%s\n' \
+    "alt + enter      terminal" \
+    "alt + d          launcher" \
+    "alt + /          this menu" \
+    "alt + t          light / dark" \
+    "alt + n          new flow (wallpaper)" \
+    "alt + z          focus mode" \
+    "alt + shift + s  screenshot" \
+    "alt + l          lock" \
+    "alt + 1..9       workspaces" \
+    "alt + f          fullscreen" \
+    "alt + shift + q  close" |
+    rofi -dmenu -i -p "keys" -no-custom -theme-str 'window { width: 420px; } listview { lines: 11; }' >/dev/null
+}
+
+choice=$(printf '%s\n' \
+  "keys    · all shortcuts" \
+  "focus   · 25 min, no distractions" \
+  "theme   · toggle light / dark" \
+  "flow    · new wallpaper" \
+  "shot    · screenshot" \
+  "files   · yazi" \
+  "monitor · btop" \
+  "music   · cava" \
+  "lock    · lock screen" \
+  "reload  · i3" \
+  "logout  · exit i3" \
+  "reboot" \
+  "poweroff" |
+  rofi -dmenu -i -p "do" -no-custom -theme-str 'listview { lines: 13; }')
+
+case "${choice%% *}" in
+  keys) keys ;;
+  focus) ~/.local/bin/focus ;;
+  theme) ~/.local/bin/theme toggle ;;
+  flow) ~/.local/bin/wall ;;
+  shot) ~/.local/bin/shot ;;
+  files) alacritty -e yazi ;;
+  monitor) alacritty -e btop ;;
+  music) alacritty -e cava ;;
+  lock) ~/.local/bin/lock ;;
+  reload) i3-msg -q reload ;;
+  logout) i3-msg exit ;;
+  reboot) systemctl reboot ;;
+  poweroff) systemctl poweroff ;;
+esac

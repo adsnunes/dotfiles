@@ -1,0 +1,39 @@
+#!/bin/sh
+# theme dark|light|toggle|apply
+# Copia as cores do modo escolhido para os arquivos que cada programa lê, e recarrega o que dá para recarregar.
+# O i3 só relê as cores com `i3-msg reload` (que não roda o exec_always), por isso o resto é recarregado aqui mesmo.
+set -eu
+dots=$(dirname "$(readlink -f "$0")")/..
+state="${XDG_CACHE_HOME:-$HOME/.cache}/theme"
+mode=$(cat "$state" 2>/dev/null || echo dark)
+
+case "${1:-apply}" in
+  toggle) [ "$mode" = dark ] && mode=light || mode=dark ;;
+  dark | light) mode=$1 ;;
+  apply) ;;
+  *) echo "uso: theme dark|light|toggle|apply" >&2; exit 2 ;;
+esac
+mkdir -p "$(dirname "$state")"
+echo "$mode" >"$state"
+
+put() { [ -f "$2" ] && cmp -s "$1" "$2" || cp "$1" "$2"; }
+put "$dots/i3/theme-$mode.conf" "$HOME/.config/i3/theme.conf"
+put "$dots/alacritty/colors-$mode.toml" "$HOME/.config/alacritty/colors.toml"
+put "$dots/polybar/colors-$mode.ini" "$HOME/.config/polybar/colors.ini"
+put "$dots/rofi/colors-$mode.rasi" "$HOME/.config/rofi/colors.rasi"
+put "$dots/dunst/colors-$mode.conf" "$HOME/.config/dunst/dunstrc.d/50-colors.conf"
+put "$dots/cava/colors-$mode" "$HOME/.config/cava/colors"
+cat "$dots/cava/base" "$HOME/.config/cava/colors" >"$HOME/.config/cava/config"
+sed -i "s/^color_theme = .*/color_theme = \"graphite-$mode\"/" "$HOME/.config/btop/btop.conf" 2>/dev/null || true
+
+# o i3 relê theme.conf; apply (no início do i3) não precisa, o i3 acabou de ler a configuração
+[ "${1:-apply}" != apply ] && i3-msg -q reload
+
+seedf="${XDG_CACHE_HOME:-$HOME/.cache}/wallpaper"
+seed=$(cat "$seedf" 2>/dev/null || echo 1962)
+[ -f "$dots/wallpapers/flow/$mode-$seed.png" ] || seed=1962
+feh --no-fehbg --bg-fill "$dots/wallpapers/flow/$mode-$seed.png"
+pkill -USR1 -x cava 2>/dev/null || true
+pkill -x dunst 2>/dev/null || true
+setsid -f dunst >/dev/null 2>&1
+"$dots/polybar/launch.sh"

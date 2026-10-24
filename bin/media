@@ -1,0 +1,14 @@
+#!/bin/sh
+# Música tocando, para a barra: "[ ▶ artista — faixa ]" em minúsculas; vazio quando não há player.
+# Separador "|" (e não tab): o read juntaria tabs seguidos e trocaria artista vazio pelo título.
+playerctl --follow metadata --format '{{status}}|{{lc(artist)}}|{{lc(title)}}' 2>/dev/null |
+  while IFS='|' read -r status artist title; do
+    case "$status" in
+      Playing) icon='▶' ;;
+      Paused) icon='॥' ;;
+      *) echo; continue ;;
+    esac
+    s="${artist:+$artist — }$title"
+    [ ${#s} -gt 48 ] && s="$(printf '%s' "$s" | cut -c1-47)…"
+    echo "[ $icon $s ]"
+  done

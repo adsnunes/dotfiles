@@ -1,0 +1,97 @@
+# graphite · yazi: só a cor do terminal (vale para o claro e o escuro), sem ícones, sem cápsulas
+[mgr]
+cwd = { fg = "reset", bold = true }
+find_keyword = { fg = "reset", bold = true, underline = true }
+find_position = { fg = "darkgray" }
+marker_copied = { fg = "gray", bg = "gray" }
+marker_cut = { fg = "darkgray", bg = "darkgray" }
+marker_marked = { fg = "white", bg = "white" }
+marker_selected = { fg = "white", bg = "white" }
+count_copied = { reversed = true }
+count_cut = { reversed = true }
+count_selected = { reversed = true }
+border_symbol = "│"
+border_style = { fg = "darkgray" }
+
+[tabs]
+active = { reversed = true, bold = true }
+inactive = { fg = "darkgray" }
+sep_inner = { open = "[", close = "]" }
+sep_outer = { open = "[", close = "]" }
+
+[mode]
+normal_main = { reversed = true, bold = true }
+normal_alt = { fg = "darkgray" }
+select_main = { reversed = true, bold = true }
+select_alt = { fg = "darkgray" }
+unset_main = { reversed = true, bold = true }
+unset_alt = { fg = "darkgray" }
+
+[indicator]
+parent = { reversed = true }
+current = { reversed = true }
+preview = { underline = true }
+padding = { open = " ", close = " " }
+
+[status]
+sep_left = { open = "[", close = "]" }
+sep_right = { open = "[", close = "]" }
+perm_sep = { fg = "darkgray" }
+perm_type = { fg = "reset" }
+perm_read = { fg = "reset" }
+perm_write = { fg = "reset" }
+perm_exec = { fg = "reset" }
+progress_label = { bold = true }
+progress_normal = { fg = "reset", bg = "darkgray" }
+progress_error = { reversed = true }
+
+[which]
+border = { fg = "darkgray" }
+cand = { fg = "reset", bold = true }
+rest = { fg = "darkgray" }
+desc = { fg = "gray" }
+separator_style = { fg = "darkgray" }
+
+[confirm]
+border = { fg = "darkgray" }
+title = { fg = "reset" }
+
+[spot]
+border = { fg = "darkgray" }
+title = { fg = "reset" }
+tbl_col = { fg = "reset" }
+tbl_cell = { reversed = true }
+
+[pick]
+border = { fg = "darkgray" }
+active = { reversed = true }
+
+[input]
+border = { fg = "darkgray" }
+
+[cmp]
+border = { fg = "darkgray" }
+
+[tasks]
+border = { fg = "darkgray" }
+hovered = { reversed = true }
+
+[help]
+border = { fg = "darkgray" }
+chord = { fg = "reset", bold = true }
+
+[filetype]
+rules = [
+	{ url = "*/", fg = "reset", bold = true },
+	{ url = "*", is = "exec", fg = "reset", italic = true },
+	{ mime = "**/image/*", fg = "gray" },
+	{ mime = "**/{audio,video}/*", fg = "gray" },
+	{ url = "*", fg = "gray" },
+]
+
+[icon]
+globs = []
+dirs = []
+files = []
+exts = []
+conds = []

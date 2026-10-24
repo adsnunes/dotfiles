@@ -1,0 +1,82 @@
+/* graphite · rofi */
+configuration {
+    modi: "drun,run,window";
+    show-icons: false;
+    drun-display-format: "{name}";
+    display-drun: "run";
+    display-run: "cmd";
+    display-window: "win";
+    font: "JetBrainsMono Nerd Font 9";
+}
+
+@import "~/.config/rofi/colors.rasi"
+
+* {
+    background-color: transparent;
+    text-color: @fg;
+    border: 0;
+}
+
+window {
+    width: 380px;
+    location: center;
+    background-color: @bg;
+    border: 1px;
+    border-color: @line;
+    border-radius: 8px;
+    padding: 18px;
+}
+
+mainbox {
+    spacing: 14px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    spacing: 8px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @muted;
+}
+
+prompt, entry {
+    vertical-align: 0.5;
+}
+
+entry {
+    placeholder: "type to search";
+    placeholder-color: @dim;
+    cursor-color: @hi;
+}
+
+listview {
+    lines: 8;
+    fixed-height: true;
+    scrollbar: false;
+    spacing: 2px;
+}
+
+element {
+    padding: 5px 8px;
+    border-radius: 4px;
+}
+
+element normal.normal, element alternate.normal,
+element normal.active, element alternate.active,
+element normal.urgent, element alternate.urgent {
+    background-color: transparent;
+    text-color: @muted;
+}
+
+element selected.normal, element selected.active, element selected.urgent {
+    background-color: @sel;
+    text-color: @hi;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    highlight: none;
+}

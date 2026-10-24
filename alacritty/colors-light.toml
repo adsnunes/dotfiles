@@ -1,0 +1,32 @@
+# graphite light
+[colors.primary]
+background = "#e8e6e1"
+foreground = "#2f3134"
+
+[colors.cursor]
+text = "#e8e6e1"
+cursor = "#2f3134"
+
+[colors.selection]
+text = "#2f3134"
+background = "#cfccc5"
+
+[colors.normal]
+black = "#2f3134"
+red = "#7a5c5c"
+green = "#5f6e5a"
+yellow = "#74705a"
+blue = "#5a6474"
+magenta = "#6c5f74"
+cyan = "#5a7070"
+white = "#a9aaa8"
+
+[colors.bright]
+black = "#5e6064"
+red = "#8a6a6a"
+green = "#6f7e6a"
+yellow = "#84806a"
+blue = "#6a7484"
+magenta = "#7c6f84"
+cyan = "#6a8080"
+white = "#c9c6bf"

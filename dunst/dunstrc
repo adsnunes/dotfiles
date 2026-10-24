@@ -1,0 +1,36 @@
+# graphite · dunst (cores em dunstrc.d/50-colors.conf, trocadas pelo `theme`)
+[global]
+    monitor = 0
+    follow = keyboard
+    origin = top-center
+    offset = (0, 40)
+    width = (240, 420)
+    height = (0, 120)
+    notification_limit = 3
+    padding = 12
+    horizontal_padding = 16
+    frame_width = 1
+    corner_radius = 8
+    gap_size = 6
+    separator_height = 0
+    font = JetBrainsMono Nerd Font 9
+    markup = full
+    format = "%s\n<span size='small'>%b</span>"
+    alignment = center
+    vertical_alignment = center
+    word_wrap = yes
+    ellipsize = end
+    icon_position = off
+    show_age_threshold = -1
+    idle_threshold = 0
+    mouse_left_click = close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    timeout = 3
+
+[urgency_normal]
+    timeout = 4
+
+[urgency_critical]
+    timeout = 0
